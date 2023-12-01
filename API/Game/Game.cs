@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -13,7 +14,7 @@ namespace SeaBattleWPF.API.Game
 {
     static internal class Game
     {
-        internal static GameState currentState;
+        static GameState currentState;
         internal static GameDTO CurrentGame;
         internal static bool CreatorIsCurrentUser;
 
@@ -34,6 +35,11 @@ namespace SeaBattleWPF.API.Game
             return states[key];
         }
 
+        internal static void SetState(States key)
+        {
+            currentState = states[key];
+        }
+
         static internal void RegisterField(Canvas fieldUser, bool currentUser)
         { 
             foreach (var state in states.Values)
@@ -52,15 +58,29 @@ namespace SeaBattleWPF.API.Game
                     Rectangle box = new Rectangle();
                     box.Width = 30;
                     box.Height = 30;
-                    box.Fill = fieldUser[index] == 0 ?
-                         Brushes.Blue :
-                            fieldUser[index] == 2 ?
-                            Brushes.Red :
-                            Brushes.Brown;
+                    Brush hit = Brushes.Blue; // море
+                    switch (fieldUser[index])
+                    {
+                        //case 0: hit = Brushes.Blue; break; 
+                        case 1: hit = Brushes.Red; break; // корабль
+                        case 2: hit = Brushes.Green; break; // попадание
+                        case 3: hit = Brushes.Gray; break; // промах
+                    }
+                    box.Fill = hit;
                     Canvas.SetLeft(box, i * 30);
                     Canvas.SetTop(box, j * 30);
                     fieldUserCanvas.Children.Add(box);
                 }
+        }
+
+        internal static void TestTurn(GameTurn item2)
+        {
+            currentState = currentState.TestTurn(item2);
+        }
+
+        internal static void ClickField(Canvas fieldUser, MouseButtonEventArgs e)
+        {
+            currentState.ClickField(fieldUser, e);
         }
     }
 }

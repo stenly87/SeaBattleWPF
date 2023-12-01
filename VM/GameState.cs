@@ -25,11 +25,11 @@ namespace SeaBattleWPF.VM
                 fieldUser2 = fieldUser;
         }
 
-        public GameState TestTurn(GameTurn item2)
+        public GameState TestTurn(GameTurn turn)
         {
-            if (item2.FieldUser.Count(s => s != 0) > 0)
+            if (turn.FieldUser != null)
             {
-                Game.RedrawMyField(fieldUser1, item2.FieldUser);
+                Game.RedrawMyField(fieldUser1, turn.FieldUser);
                 return Game.GetState(States.MyTurn);
             }
             return Game.GetState(States.WaitTurn);

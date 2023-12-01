@@ -34,9 +34,9 @@ namespace SeaBattleWPF.VM
         {
             OnPageClose += GameVM_OnPageClose;
             if (Game.CreatorIsCurrentUser)
-                Game.currentState = Game.GetState(States.WaitJoin);
+                Game.SetState(States.WaitJoin);
             else
-                Game.currentState = Game.GetState(States.WaitTurn);
+                Game.SetState(States.WaitTurn);
             threadApi = new Thread(ApiDDOS);
             threadApi.Start();
         }
@@ -64,14 +64,14 @@ namespace SeaBattleWPF.VM
                 var turnInfo = await Client.Instance.PostMessageAsync<GameTurn>("Game/IsMyTurn?idGame=" + Game.CurrentGame.Id);
                 if (turnInfo.Item1 == System.Net.HttpStatusCode.OK)
                     dispatcher.Invoke(() =>
-                        Game.currentState = Game.currentState.TestTurn(turnInfo.Item2));
+                        Game.TestTurn(turnInfo.Item2));
             });
         }
 
 
         internal void ClickField(Canvas fieldUser, MouseButtonEventArgs e)
         {
-            Game.currentState.ClickField(fieldUser, e);
+            Game.ClickField(fieldUser, e);
         }
 
         internal void RegisterField(Canvas fieldUser, bool currentUser)

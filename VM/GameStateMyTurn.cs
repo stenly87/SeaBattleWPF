@@ -44,7 +44,7 @@ namespace SeaBattleWPF.VM
                             else if (hit == TurnResult.Lose)
                             {
                                 box.Fill = Brushes.Black;
-                                Game.currentState = Game.GetState(States.WaitTurn);
+                                Game.SetState(States.WaitTurn);
                             }
                             else
                             {
